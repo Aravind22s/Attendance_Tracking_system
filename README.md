@@ -118,7 +118,7 @@ Follow these steps to set up the project locally for development.
 4. Create a `.env` file in the `backend` directory and add your configurations:
    ```env
    MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority
-   MONGO_DB=cadd_attendance
+   MONGO_DB=attendance_db
    SECRET_KEY=your_super_secret_jwt_key
    ```
 5. Start the FastAPI development server:
