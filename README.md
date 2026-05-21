@@ -151,4 +151,4 @@ Follow these steps to set up the project locally for development.
 ## 📝 License
 This project is licensed under the MIT License.
 
-Developed with 💜 by the **Aravind22s / CADD Team**.
+Developed with 💜 by the **Aravind22s / Team**.
