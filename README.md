@@ -2,196 +2,153 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)](https://react.dev/)
-[![Electron](https://img.shields.io/badge/Electron-47848F?style=for-the-badge&logo=electron)](https://www.electronjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python)](https://www.python.org/)
 
-An advanced, premium-tier hybrid **Desktop & Web** employee attendance tracker powered by artificial intelligence. This system combines a modern, reactive React web application with a high-performance Python FastAPI service to offer state-of-the-art live facial recognition attendance tracking. It runs seamlessly inside a lightweight **Electron** container locally, and is fully configured for multi-service **Vercel** cloud deployments.
+An advanced, premium-tier **Web-Based** employee attendance tracker powered by artificial intelligence. This system combines a modern, reactive React web application with a high-performance Python FastAPI service to offer state-of-the-art live facial recognition attendance tracking. 
+
+---
+
+## ✨ Working Features
+
+### 1. 🧠 Live Face Recognition Pipeline
+- **Real-Time Processing**: Utilizes ultra-fast biometric identification using convolutional neural network models (`face-recognition` & `dlib`) and OpenCV for live camera streaming directly from the web interface.
+- **Liveness & Accuracy**: Extracts facial embeddings during registration and securely matches them against the live camera feed with high precision to mark attendance.
+
+### 2. ⚡ Automated Attendance Management
+- **Contactless Logging**: Employees simply walk up to the camera; the system detects the face, retrieves the corresponding employee profile, and automatically logs the entry/exit time.
+- **Smart Validation**: The system calculates working hours, manages grace periods, and intelligently avoids duplicate check-ins within short time frames.
+
+### 3. 🎨 Premium Admin Dashboard
+- **Real-Time Analytics**: Visualizes attendance telemetry, daily trends, and department-wise statistics using beautifully animated `Recharts`.
+- **Modern Interface**: A sleek, tailored CSS architecture supporting a dark-mode default interface, rich transitions, responsive layouts, and modern iconography (`Lucide React`).
+
+### 4. 👥 Employee Management Portal
+- **Centralized Database**: Add, edit, or remove employees and map them to their respective departments.
+- **Secure Image Encoding**: Employee photos are instantly converted into 128-dimension mathematical arrays (embeddings) and stored securely in MongoDB, ensuring privacy and fast retrieval.
+
+### 5. 🔒 Secure Authentication & Data
+- **JWT Protection**: The admin dashboard and sensitive API endpoints are secured via JWT token authentication and bcrypt password hashing.
+- **Cloud Database Integration**: Fully integrated with MongoDB Atlas for secure, cloud-based data storage ensuring zero data loss and accessibility from anywhere.
 
 ---
 
 ## 🏗️ System Architecture
 
-The project is architected as three main services:
-
 ```mermaid
 flowchart TB
-    subgraph Desktop [Electron App Desktop Shell]
-        Electron[Electron Main Process]
+    subgraph WebInterface [Frontend Layer]
         ReactUI[React SPA / UI - Vite]
     end
 
-    subgraph ServiceLayer [Service Layer]
+    subgraph ServiceLayer [Backend Service Layer]
         FastAPI[FastAPI Python Backend]
         FaceRec[Face Recognition & CV2 Pipeline]
         Scheduler[APScheduler Background Jobs]
     end
 
     subgraph Storage [Storage Layer]
-        MongoDB[(MongoDB Database)]
-        LocalAssets[(Local Face Asset Store)]
+        MongoDB[(MongoDB Atlas Database)]
     end
 
-    Electron -->|Spawns / Manages| FastAPI
-    ReactUI -->|API Requests| FastAPI
-    ReactUI -->|Serves Views| Electron
+    ReactUI -->|API Requests & Video Feed| FastAPI
     FastAPI -->|Queries/Updates| MongoDB
     FastAPI -->|Invokes| FaceRec
     FastAPI -->|Coordinates| Scheduler
-    FaceRec -->|Reads facial embeddings| LocalAssets
+    FaceRec -->|Reads facial embeddings| MongoDB
 ```
-
----
-
-## ✨ Features
-
-- **🧠 Live Face Recognition Pipeline**: Ultra-fast biometric identification using convolutional neural network models (`face-recognition` & `dlib`) and OpenCV camera streaming.
-- **⚡ Advanced FastAPI Backend**: Asynchronous endpoints, custom JWT token authentication, modular routers, cache warming for facial embeddings, and background schedulers (`APScheduler`).
-- **🎨 Sleek Premium Dashboard**: Beautiful user experience with tailored CSS variables, dark-mode default interface, rich transitions, responsive layouts, data analytics via `Recharts`, and modern icons with `Lucide React`.
-- **💻 Desktop Integration**: Built-in native Electron wrapper with cross-platform native notification dispatchers and dynamic lifecycle controllers.
-- **🚀 Cloud Deployment Ready**: Integrated `vercel.json` and multi-service configurations for instantaneous cloud deployment of frontend and serverless Python backends.
-- **🔋 Offline Autopilot scripts**: Automated startup pipelines checking local databases, warming cache files, and launching all servers with a single command.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend Service
+### Frontend Application
 - **React (v19)** with **Vite (v8)**
-- **Recharts** for attendance telemetry and trends
+- **Recharts** for attendance telemetry and data visualization
 - **Lucide React** for interactive, premium iconography
-- Customized Vanilla CSS3 theme framework supporting HSL-tailored variables
+- Customized Vanilla CSS3 framework supporting HSL-tailored variables and glassmorphism
 
-### Backend Sidecar
+### Backend Service
 - **Python (v3.10+)** with **FastAPI**
-- **Dlib** & **Face Recognition** (biometrics processing)
-- **OpenCV (cv2)** (camera and frame extraction pipelines)
-- **APScheduler** (cron tasks, telemetry aggregations, automated report generator)
-- **PyJWT** & **bcrypt** (advanced secure user credentials management)
-- **PyInstaller** (converts the backend into a zero-dependency local binary executable)
-
-### Desktop Container
-- **Electron (v29)** framework
-- Subprocess spawning runtime (managing FastAPI instances seamlessly)
+- **Dlib** & **Face Recognition** (biometrics and facial processing)
+- **OpenCV (cv2)** (camera processing and frame extraction)
+- **APScheduler** (cron tasks and telemetry aggregations)
+- **PyJWT** & **passlib** (secure user credentials management)
+- **Pydantic** (data validation and schema enforcement)
 
 ### Database
-- **MongoDB** (local database or Atlas cloud cluster)
+- **MongoDB Atlas** (Cloud Database Cluster)
 
 ---
 
-## 🚀 Getting Started
+## 💻 Developer Setup
+
+Follow these steps to set up the project locally for development.
 
 ### Prerequisites
 - **Node.js** (v18 or higher)
-- **Python** (v3.10.x - *Note: face-recognition libraries recommend Python 3.10*)
-- **MongoDB** (installed locally or a running Atlas instance)
+- **Python** (v3.10.x recommended)
+- **C++ Build Tools** (Required on Windows for compiling `dlib`. Install via Visual Studio Build Tools).
+- **MongoDB Atlas Account** (Create a free cluster at mongodb.com).
 
----
+### 1. Database Configuration
+1. Log in to MongoDB Atlas and create a new cluster.
+2. Under **Database Access**, create a user and password.
+3. Under **Network Access**, add your current IP address (or `0.0.0.0/0` for development).
+4. Get your connection string (URI) to be used in the `.env` file.
 
-### ⚡ Easy Start (Windows Automatic Launcher)
-
-We provide optimized scripts to build and start everything with a single click.
-
-1. **Initialize Database** (First time only):
-   Right-click `install_mongodb.bat` and run it as **Administrator** to download/install and configure the MongoDB service automatically.
-
-2. **Launch Application**:
-   Double-click `run_desktop.bat` to launch the database, start the FastAPI sidecar, compile the Vite dev server, and boot the Electron client container automatically.
-
----
-
-### 🔧 Manual Setup
-
-If you prefer to start the services individually, follow the steps below:
-
-#### 1. Setup & Start MongoDB
-Start a MongoDB daemon on port `27017` with database path pointing to `./data/mongodb`:
-```bash
-mongod --dbpath "./data/mongodb" --port 27017
-```
-
-#### 2. Configure Backend Service
-1. Navigate to the backend folder:
+### 2. Backend Setup
+1. Open a terminal and navigate to the backend directory:
    ```bash
    cd backend
    ```
-2. Create a virtual environment and activate it:
+2. Create and activate a Python virtual environment:
    ```bash
    python -m venv venv
-   # On Windows:
+   # Windows:
    .\venv\Scripts\activate
-   # On macOS/Linux:
+   # macOS/Linux:
    source venv/bin/activate
    ```
-3. Install dependencies:
+3. Install the required Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure environment variables in `./backend/.env` (e.g., `MONGO_URI`, `SECRET_KEY`).
-5. Run the FastAPI development server:
+4. Create a `.env` file in the `backend` directory and add your configurations:
+   ```env
+   MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/?retryWrites=true&w=majority
+   MONGO_DB=cadd_attendance
+   SECRET_KEY=your_super_secret_jwt_key
+   ```
+5. Start the FastAPI development server:
    ```bash
    python run.py
    ```
+   *The server will start at `http://127.0.0.1:8000` and automatically connect to MongoDB and seed default data.*
 
-#### 3. Configure Frontend Service
-1. Navigate to the frontend folder:
+### 3. Frontend Setup
+1. Open a new terminal and navigate to the frontend directory:
    ```bash
-   cd ../frontend
+   cd frontend
    ```
-2. Install npm packages:
+2. Install the Node.js dependencies:
    ```bash
    npm install
    ```
-3. Boot up the Vite dev server:
+3. Create a `.env` file in the `frontend` directory (if needed to override defaults):
+   ```env
+   VITE_API_URL=http://127.0.0.1:8000
+   ```
+4. Start the Vite development server:
    ```bash
    npm run dev
    ```
-
-#### 4. Launch Electron
-1. Navigate to the desktop folder:
-   ```bash
-   cd ../desktop
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Launch the Electron app:
-   ```bash
-   npm start
-   ```
-
----
-
-## 📦 Bundling & Production Compilation
-
-### Compiling Standalone Backend Executable
-The application features a Python builder script to package your backend code into a single, lightning-fast binary executable so it can be deployed on machines without Python installed:
-
-```bash
-# Execute standalone compiler
-python build_backend.py --execute
-```
-This produces a compiled binary under `dist/run/` which is read directly by Electron in production.
-
----
-
-## ☁️ Cloud Deployment (Vercel)
-
-This application is ready out-of-the-box to be deployed as a web application on Vercel. We use Vercel's multi-project `experimentalServices` architecture to configure deployment in one click:
-
-- **Frontend SPA**: Handled by `@vercel/static` mapping to Vite.
-- **Backend API**: Deployed as Serverless Python Functions via `@vercel/python` routing directly to our FastAPI endpoints.
-
-Deploy simply by linking the root directory of this repository to Vercel:
-```bash
-vercel
-```
+   *The application will be accessible at `http://localhost:5173`.*
 
 ---
 
 ## 📝 License
-This project is licensed under the ISC License - see the [desktop/package.json](file:///d:/Project/Attendence__Tracking_system/desktop/package.json) file for details.
+This project is licensed under the MIT License.
 
-Developed with 💜 by the **Antigravity Dev Team**.
+Developed with 💜 by the **Aravind22s / CADD Team**.
