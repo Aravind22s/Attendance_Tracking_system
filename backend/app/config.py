@@ -10,7 +10,7 @@ class Settings(BaseSettings):
 
     # MongoDB (primary and only database)
     MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017")
-    MONGO_DB: str = os.getenv("MONGO_DB", "cadd_attendance")
+    MONGO_DB: str = os.getenv("MONGO_DB", "attendance_register")
 
     # Storage for registered facial assets (raw image backups)
     DATA_DIR: str = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data")
